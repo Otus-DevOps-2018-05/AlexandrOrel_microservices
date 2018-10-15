@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+
+  post_db:
+    image: mongo:${VERSION_MONGO:-3.2}
+    volumes:
+      - post_db:/data/db
+    networks:
+      - back_net
+
+  ui:
+    image: ${USER_NAME}/ui:${VERSION_UI:-latest}
+    ports:
+      - ${EXTERNAL_PORT:-9292}:9292/tcp
+    networks:
+      - front_net
+
+  post:
+    image: ${USER_NAME}/post:${VERSION_POST:-latest}
+    networks:
+      - front_net
+      - back_net
+
+  comment:
+    image: ${USER_NAME}/comment:${VERSION_COMMENT:-latest}
+    networks:
+      - front_net
+      - back_net
+
+volumes:
+  post_db:
+
+networks:
+  back_net:
+  front_net:
